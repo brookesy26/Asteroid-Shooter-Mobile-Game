@@ -1,0 +1,210 @@
+{
+  "asteroidAchievements": {
+    "1": {
+      "title": "Pebble Punisher",
+      "details": "Destroyed 10+\n asteroids",
+      "level": 1
+    },
+    "2": {
+      "title": "Stone Striker",
+      "details": "Destroyed 30+\n asteroids",
+      "level": 2
+    },
+    "3": {
+      "title": "Rock Razer",
+      "details": "Destroyed 50+\n asteroids",
+      "level": 3
+    },
+    "4": {
+      "title": "Boulder Blaster",
+      "details": "Destroyed 75+\n asteroids",
+      "level": 4
+    },
+    "5": {
+      "title": "Granite Grinder",
+      "details": "Destroyed 100+\n asteroids",
+      "level": 5
+    },
+    "6": {
+      "title": "Cliff Crusher",
+      "details": "Destroyed 150+\n asteroids",
+      "level": 6
+    },
+    "7": {
+      "title": "Meteorite Mauler",
+      "details": "Destroyed 185+\n asteroids",
+      "level": 7
+    },
+    "8": {
+      "title": "Avalanche Annihilator",
+      "details": "Destroyed 200+\n asteroids",
+      "level": 8
+    },
+    "9": {
+      "title": "Titan Toppler",
+      "details": "Destroyed 250+\n asteroids",
+      "level": 9
+    },
+    "10": {
+      "title": "The Destroyer",
+      "details": "Destroyed 300+\n asteroids",
+      "level": 10
+    }
+  },
+  "energyAchievements": {
+    "1": {
+      "title": "Energy Eater",
+      "details": "Depleted 100+\n energy points",
+      "level": 1
+    },
+    "2": {
+      "title": "Power Predator",
+      "details": "Depleted 200+\n energy points",
+      "level": 2
+    },
+    "3": {
+      "title": "Fuel Fiend",
+      "details": "Depleted 300+\n energy points",
+      "level": 3
+    },
+    "4": {
+      "title": "Charge Conqueror",
+      "details": "Depleted 400+\n energy points",
+      "level": 4
+    },
+    "5": {
+      "title": "Vitality Vampire",
+      "details": "Depleted 500+\n energy points",
+      "level": 5
+    },
+    "6": {
+      "title": "Mega-Muncher",
+      "details": "Depleted 600+\n energy points",
+      "level": 6
+    },
+    "7": {
+      "title": "Force Feaster",
+      "details": "Depleted 700+\n energy points",
+      "level": 7
+    },
+    "8": {
+      "title": "Energy Annihilator",
+      "details": "Depleted 800+\n energy points",
+      "level": 8
+    },
+    "9": {
+      "title": "Quantum Quencher",
+      "details": "Depleted 900+\n energy points",
+      "level": 9
+    },
+    "10": {
+      "title": "Energetic Devourer",
+      "details": "Depleted 1000+\n energy points",
+      "level": 10
+    }
+  },
+  "levelAchievements": {
+    "1": {
+      "title": "Novice Navigator",
+      "details": "Reached Level 5",
+      "level": 1
+    },
+    "2": {
+      "title": "Adept Adventurer",
+      "details": "Reached Level 10",
+      "level": 2
+    },
+    "3": {
+      "title": "Skilled Explorer",
+      "details": "Reached Level 15",
+      "level": 3
+    },
+    "4": {
+      "title": "Proficient Pathfinder",
+      "details": "Reached Level 20",
+      "level": 4
+    },
+    "5": {
+      "title": "Journeyman Jumper",
+      "details": "Reached Level 25",
+      "level": 5
+    },
+    "6": {
+      "title": "Expert Expeditionist",
+      "details": "Reached Level 30",
+      "level": 6
+    },
+    "7": {
+      "title": "Masterful Mapper",
+      "details": "Reached Level 35",
+      "level": 7
+    },
+    "8": {
+      "title": "Elite Voyager",
+      "details": "Reached Level 40",
+      "level": 8
+    },
+    "9": {
+      "title": "Legendary Wayfarer",
+      "details": "Reached Level 45",
+      "level": 9
+    },
+    "10": {
+      "title": "Ascended Explorer",
+      "details": "Reached Level 50",
+      "level": 10
+    }
+  },
+  "scoreAchievements": {
+    "1": {
+      "title": "Score Novice",
+      "details": "Reached 1,000\n points",
+      "level": 1
+    },
+    "2": {
+      "title": "Point Prodigy",
+      "details": "Reached 2,000\n points",
+      "level": 2
+    },
+    "3": {
+      "title": "Score Maestro",
+      "details": "Reached 3,000\n points",
+      "level": 3
+    },
+    "4": {
+      "title": "Elite Scorer",
+      "details": "Reached 4,000\n points",
+      "level": 4
+    },
+    "5": {
+      "title": "Legendary Pointmaker",
+      "details": "Reached 5,000\n points",
+      "level": 5
+    },
+    "6": {
+      "title": "Masterful Marksman",
+      "details": "Reached 6,000\n points",
+      "level": 6
+    },
+    "7": {
+      "title": "Epic Pointmaster",
+      "details": "Reached 7,000\n points",
+      "level": 7
+    },
+    "8": {
+      "title": "Point Commander",
+      "details": "Reached 8,000\n points",
+      "level": 8
+    },
+    "9": {
+      "title": "Supreme Scorer",
+      "details": "Reached 9,000\n points",
+      "level": 9
+    },
+    "10": {
+      "title": "Ultimate Achiever",
+      "details": "Reached 10,000\n points",
+      "level": 10
+    }
+  }
+}
