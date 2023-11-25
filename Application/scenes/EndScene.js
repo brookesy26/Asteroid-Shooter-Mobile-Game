@@ -116,7 +116,6 @@ export default class EndScene extends Phaser.Scene {
       cont[i].setPosition(0, padding);
       padding += 140;
     };
-    achievementsStorage
 
     this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
       achievementsStorage.x += deltaX * 0.2;

@@ -17,27 +17,27 @@ export default class GameScene extends Phaser.Scene {
       timeDelay: 1000,
       energyRegen: 0.08,
       weaponEnergyCost: 2.5,
-      thrustEnergyCost: 0.08,
+      thrustEnergyCost: 0.09,
       thrustSpeed: 0.05,
     };
     this.normalObject = {
       fireSpeed: 150,
       velocity: 1,
-      timeDelay: 800,
+      timeDelay: 700,
       energyRegen: 0.05,
       weaponEnergyCost: 3,
       thrustEnergyCost: 0.1,
-      thrustSpeed: 0.1,
+      thrustSpeed: 0.09,
     };
 
     this.hardObject = {
       fireSpeed: 200,
-      velocity: 2,
+      velocity: 1.5,
       timeDelay: 600,
       energyRegen: 0.5,
       weaponEnergyCost: 5,
       thrustEnergyCost: 1,
-      thrustSpeed: 0.1,
+      thrustSpeed: 0.09,
     };
 
     //Achievement stats
@@ -62,11 +62,14 @@ export default class GameScene extends Phaser.Scene {
     this.shipCollision = false;
     this.GameOver = { font: '32px KenVector Future', fill: '#E86A17' };
     this.textStyle = { font: '16px KenVector Future', fill: '#ffffff' };
+
+    this.timing;
   }
 
   preload() {
     // Load assets
-    this.load.image('bg', 'assets/ui/darkPurple.png');
+    this.load.image('black_bg', 'assets/ui/black.png');
+    this.load.image('purple_bg', 'assets/ui/darkPurple.png');
     this.load.image('ship', 'assets/GameObjects/Ship_270.png');
     this.load.image('red', 'assets/GameObjects/red_particle.png');
     this.load.image('rocket', 'assets/GameObjects/weaponLevel1.png');
@@ -89,17 +92,17 @@ export default class GameScene extends Phaser.Scene {
         this.gameModeSelected = this.hardObject;
         break;
     }
-    console.log(`the game mode has been changed to ${this.modeSelected}`);
+    // console.log(`the game mode has been changed to ${this.modeSelected}`);
 
-    const worldObj = this.matter.world.setBounds(0, 0, 340, 600, 64, true, true, false, true);
-    console.log(worldObj);
+    const worldObj = this.matter.world.setBounds(0, 0, 340, 600, 64, true, true, false, false,);
+    // console.log(worldObj);
     const gameHeight = this.game.config.height;
     const gameWidth = this.game.config.width;
 
     // Collision categories 
     this.missileAndAsteroidGroup = this.matter.world.nextCategory();
     //background
-    this.add.tileSprite(0, 0, 800, 600, 'bg').setOrigin(0, 0);
+    this.add.tileSprite(0, 0, 800, 600, 'purple_bg').setOrigin(0, 0);
     //score and levels
     this.scoreText = this.add.text(10, 10, `Score: 0`, this.textStyle);
     this.levelText = this.add.text(10, 30, `L 1`, this.textStyle);
@@ -125,9 +128,9 @@ export default class GameScene extends Phaser.Scene {
     );
     //Ship Collision detection - if ship hits wall log it, else (hits a asteroid) end the game
     this.playerShip.setOnCollide((collisionData) => {
-      console.log(collisionData.bodyA.gameObject)
+      // console.log(collisionData.bodyA.gameObject)
       if (collisionData.bodyA.gameObject === null) {
-        console.log('wall collision')
+        // console.log('wall collision')
       } else {
         const ship = collisionData.bodyA.gameObject;
         const rock = collisionData.bodyB.gameObject;
@@ -154,7 +157,7 @@ export default class GameScene extends Phaser.Scene {
       this.missileStorage.push(this.missile);
       //missile collision detection - if hits an asteroid
       this.missile.setOnCollide((collisionDataObject) => {
-        console.log(collisionDataObject.bodyA.gameObject)
+        // console.log(collisionDataObject.bodyA.gameObject)
         const missile = collisionDataObject.bodyA.gameObject;
         const asteroid = collisionDataObject.bodyB.gameObject;
         missile.setActive(false);
@@ -163,13 +166,46 @@ export default class GameScene extends Phaser.Scene {
         asteroid.setActive(false);
         asteroid.setVisible(false);
         asteroid.world.remove(asteroid.body, true);
-        this.scoreText.setText(`Score: ${this.playerScore += 20}`);
+        this.scoreText.setText(`Score: ${this.playerScore += 10}`);
         this.asteroidsDestroyed += 1;
         missile.emitter.explode(15, 0, 0);
+
+        // Player level check
+        // level text update 
+        // velocity(asteroid speed) increase
+        if (this.playerScore - this.scoreCheck >= 100) {
+          this.levelText.setText(`L ${this.playerLevel += 1}`);
+          this.scoreCheck = this.playerScore;
+          switch (this.playerLevel) {
+            case 5:
+              this.timing.remove()
+              this.handler(this.gameModeSelected.timeDelay -= 100);
+              this.gameModeSelected.velocity += 0.1;
+              break;
+            case 10:
+              this.timing.remove()
+              this.handler(this.gameModeSelected.timeDelay -= 100);
+              this.gameModeSelected.velocity += 0.1;
+              break;
+            case 15:
+              this.timing.remove()
+              this.handler(this.gameModeSelected.timeDelay -= 100);
+              this.gameModeSelected.velocity += 0.1;
+              break;
+            case 20:
+              console.log(this.gameModeSelected.timeDelay);
+              this.timing.remove()
+              this.handler(this.gameModeSelected.timeDelay -= 100);
+              this.gameModeSelected.velocity += 0.1;
+              break;
+          }
+        }
       })
     };
 
-    //COLLISION_START event 
+
+    const bottomWall = this.add.image(0, this.game.config.height, 'bg').setOrigin(0, 0).setScale(2, 0.2)
+
     //Phaser.Physics.Matter.Events.COLLISION_START
     //collision object has the pairs stores in an array
     this.matter.world.on('collisionstart', collisionObject => {
@@ -180,15 +216,15 @@ export default class GameScene extends Phaser.Scene {
         const bodyB = pairs[i].bodyB;
         //ship id is 7
         //world bottom id === 6
-        console.log(bodyB);
-        console.log(bodyA);
-        console.log(worldObj);
+        // console.log(bodyB);
+        // console.log(bodyA);
+        // console.log(worldObj);
         //error here - on second play bottom wall is not 6 ????? ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (bodyA.id === 6) {
-          console.log(bodyA.id);
+          // console.log(bodyA.id);
           this.shipEnd = true;
           if (this.shipEnd === true) {
-            console.log(this.playerShip);
+            // console.log(this.playerShip);
             this.playerShip.body.gameObject.setActive(false);
             this.playerShip.body.gameObject.setVisible(false);
             this.playerShip.body.gameObject.world.remove(this.playerShip, true)
@@ -205,19 +241,20 @@ export default class GameScene extends Phaser.Scene {
 
     // Event Emmitter setup - used in time event
     var emitter = new Phaser.Events.EventEmitter();
-    emitter.on('upDateSpawn', this.handler, this);
-    emitter.emit('upDateSpawn', this.gameModeSelected.timeDelay);
+    emitter.on('level1', this.handler, this);
+    emitter.emit('level1', this.gameModeSelected.timeDelay);
   };
 
   // time event handler
   // calls asteroid function
   handler(delay) {
-    this.time.addEvent({
+    this.timing = this.time.addEvent({
       delay: delay,
       callback: this.newAsteroid,
       callbackScope: this,
       loop: true
     });
+    return this.timing
   }
 
   //Create new Asteroid
@@ -289,14 +326,6 @@ export default class GameScene extends Phaser.Scene {
     if (this.energy < 100) {
       this.energy += this.gameModeSelected.energyRegen;
       this.energyMeter.scaleX = this.energy / 100;
-    }
-    // Player level check
-    // level text update 
-    // velocity(asteroid speed) increase
-    if (this.playerScore - this.scoreCheck >= 100) {
-      this.levelText.setText(`L ${this.playerLevel += 1}`);
-      this.gameModeSelected.velocity += 0.1;
-      this.scoreCheck = this.playerScore;
     }
   }
 }
