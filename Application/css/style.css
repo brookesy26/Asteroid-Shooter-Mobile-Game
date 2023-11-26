@@ -1,8 +1,8 @@
 @font-face {
-  font-family: 'KenVector Future';
-  src:
-    local('KenVector Future'),
-    url('./assets/fonts/kenvector_future.woff2') format('woff2');
+  font-family: 'gameFont';
+  src: url('../assets/fonts/kenvector_future-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* Clears default padding and margins*/
@@ -11,13 +11,13 @@
   margin: 0;
 }
 
-
 /* 
 Adds font family and backing image
 set up page layout and structure 
 */
 body {
-  font-family: 'KenVector Future';
+  color: white;
+  font-family: 'gameFont';
   background-image: url('../assets/ui/black.png');
   display: flex;
   justify-content: center;

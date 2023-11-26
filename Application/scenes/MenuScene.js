@@ -17,12 +17,12 @@ export default class MainMenu extends Phaser.Scene {
   create() {
     //text style objects
     const headingStyle = {
-      font: '16px KenVector Future',
+      font: '16px gameFont',
       fill: '#E86A17'
     };
 
     const textStyle = {
-      font: '16px KenVector Future',
+      font: '16px gameFont',
       fill: '#ffffff'
     };
     //background repeating image 

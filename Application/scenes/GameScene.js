@@ -63,8 +63,8 @@ export default class GameScene extends Phaser.Scene {
     this.timing;
 
     // text objects
-    this.GameOver = { font: '32px KenVector Future', fill: '#E86A17' };
-    this.textStyle = { font: '16px KenVector Future', fill: '#ffffff' };
+    this.GameOver = { font: '32px gameFont', fill: '#E86A17' };
+    this.textStyle = { font: '16px gameFont', fill: '#ffffff' };
 
   }
 

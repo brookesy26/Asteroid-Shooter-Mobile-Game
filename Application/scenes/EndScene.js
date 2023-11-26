@@ -27,8 +27,8 @@ export default class EndScene extends Phaser.Scene {
     this.add.tileSprite(0, 0, 800, 600, 'black_bg').setOrigin(0, 0);
 
     // style objects
-    const headingStyle = { font: '20px KenVector Future', fill: '#ffffff' };
-    const textStyle = { font: '16px KenVector Future', fill: '#ffffff' };
+    const headingStyle = { font: '20px gameFont', fill: '#ffffff' };
+    const textStyle = { font: '16px gameFont', fill: '#ffffff' };
 
     // adds the page heading and sets alignment
     const heading = this.add.text(0, 0, 'Achievements', headingStyle).setOrigin(0, 0);
