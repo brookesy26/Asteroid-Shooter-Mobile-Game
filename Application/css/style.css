@@ -10,7 +10,7 @@ set up page layout and structure
 */
 body {
   font-family: 'KenVector Future';
-  background-image: url('/Application/assets/ui/black.png');
+  background-image: url('../assets/ui/black.png');
   display: flex;
   justify-content: center;
   align-items: center;

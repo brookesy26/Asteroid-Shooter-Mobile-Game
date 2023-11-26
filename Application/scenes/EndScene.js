@@ -23,6 +23,9 @@ export default class EndScene extends Phaser.Scene {
     // retrives json data file
     const achiData = this.cache.json.get('achievements');
 
+    // background repating image
+    this.add.tileSprite(0, 0, 800, 600, 'black_bg').setOrigin(0, 0);
+
     // style objects
     const headingStyle = { font: '20px KenVector Future', fill: '#ffffff' };
     const textStyle = { font: '16px KenVector Future', fill: '#ffffff' };
