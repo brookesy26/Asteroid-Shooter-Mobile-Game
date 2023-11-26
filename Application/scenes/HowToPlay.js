@@ -15,8 +15,8 @@ export default class HowToPlay extends Phaser.Scene {
 
   create() {
     // text style objects 
-    const headingStyle = { font: '20px KenVector Future', fill: '#E86A17' };
-    const textStyle = { font: '16px KenVector Future', fill: '#ffffff' };
+    const headingStyle = { font: '20px gameFont', fill: '#E86A17' };
+    const textStyle = { font: '16px gameFont', fill: '#ffffff' };
 
     // text array 
     const info = [
