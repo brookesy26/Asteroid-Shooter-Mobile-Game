@@ -6,7 +6,10 @@
 
 @font-face {
   font-family: 'KenVector Future';
-  src: url('../assets/Font/kenvector_future.ttf') format('ttf');
+  font-display: fallback;
+  src:
+    local('KenVector Future'),
+    url('../assets/fonts/kenvector_future.ttf') format('ttf');
 }
 
 /* 
