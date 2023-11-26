@@ -1,16 +1,16 @@
+@font-face {
+  font-family: 'KenVector Future';
+  src:
+    local('KenVector Future'),
+    url('./assets/fonts/kenvector_future.woff2') format('woff2');
+}
+
 /* Clears default padding and margins*/
 * {
   padding: 0;
   margin: 0;
 }
 
-@font-face {
-  font-family: 'KenVector Future';
-  font-display: fallback;
-  src:
-    local('KenVector Future'),
-    url('../assets/fonts/kenvector_future.ttf') format('ttf');
-}
 
 /* 
 Adds font family and backing image
