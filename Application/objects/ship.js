@@ -1,3 +1,6 @@
+// player ship class - matter sprite 
+// adds physics requires 
+// adds a particle emitter to the ship
 export default class Ship extends Phaser.Physics.Matter.Sprite {
   constructor(world, x, y, texture, particleTexture) {
     super(world, x, y, texture)

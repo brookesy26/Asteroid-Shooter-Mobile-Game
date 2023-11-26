@@ -1,11 +1,16 @@
+/* Clears default padding and margins*/
 * {
   padding: 0;
   margin: 0;
 }
 
+/* 
+Adds font family and backing image
+set up page layout and structure 
+*/
 body {
   font-family: 'KenVector Future';
-  background-image: url('/Application/assets/ui/black.png');
+  background-image: url('../assets/ui/black.png');
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,26 +20,8 @@ body {
   position: relative;
 }
 
-.earth {
-  position: absolute;
-  top: 50px;
-  width: 300px;
-  z-index: -999;
-  aspect-ratio: 1/1;
-  animation: planetRotate 200s linear forwards infinite;
-}
-
+/* Adds border around canvas*/
 canvas {
   border: 2px solid #E86A17;
   border-radius: 12px;
-}
-
-@keyframes planetRotate {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }

@@ -1,8 +1,10 @@
+// scene imports
 import MainMenu from "./scenes/MenuScene.js";
 import GameScene from "./scenes/GameScene.js";
 import EndScene from "./scenes/EndScene.js";
 import HowToPlay from "./scenes/HowToPlay.js";
 
+// game config object 
 const config =
 {
   type: Phaser.AUTO,
@@ -10,7 +12,6 @@ const config =
   height: 600,
   transparent: true,
   parent: 'body',
-
   physics: {
     default: 'matter',
     matter: {
@@ -22,7 +23,6 @@ const config =
     }
   },
   scene: [MainMenu, HowToPlay, GameScene, EndScene]
-  // MainMenu, HowToPlay, GameScene,
 };
 
 const game = new Phaser.Game(config);

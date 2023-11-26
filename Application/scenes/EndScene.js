@@ -1,5 +1,6 @@
 export default class EndScene extends Phaser.Scene {
   constructor() {
+    // scene key
     super({ key: 'EndScene' });
   }
   init(data) {
@@ -8,11 +9,6 @@ export default class EndScene extends Phaser.Scene {
     this.energyUsage = data.energyUsage;
     this.level = data.level;
     this.score = data.score;
-
-    // this.destroyedAsteroids = 30;
-    // this.energyUsage = 300;
-    // this.level = 10;
-    // this.score = 2000;
   }
 
   preload() {
@@ -26,18 +22,23 @@ export default class EndScene extends Phaser.Scene {
   create() {
     // retrives json data file
     const achiData = this.cache.json.get('achievements');
+
+    // background repating image
+    this.add.tileSprite(0, 0, 800, 600, 'black_bg').setOrigin(0, 0);
+
     // style objects
     const headingStyle = { font: '20px KenVector Future', fill: '#ffffff' };
     const textStyle = { font: '16px KenVector Future', fill: '#ffffff' };
-    // adds the page heading 
+
+    // adds the page heading and sets alignment
     const heading = this.add.text(0, 0, 'Achievements', headingStyle).setOrigin(0, 0);
-    // page heading alignment
     heading.setPosition((this.cameras.main.width / 2) - heading.width / 2, 45).setDepth(5);
 
-    const test = this.add.image(0, 0, 'black_bg').setOrigin(0, 0).setScale(1.5, 0.4).setDepth(4);
-    const test2 = this.add.image(0, 480, 'black_bg').setOrigin(0, 0).setScale(1.5, 0.6).setDepth(4);
-    test.setAlpha(1, 1, 0.8, 0.8);
-    test2.setAlpha(0.8, 0.8, 1, 1);
+    // adds backing images to heading / button with less than full opacity to slightly hide extra achievements
+    const topBacking = this.add.image(0, 0, 'black_bg').setOrigin(0, 0).setScale(1.5, 0.4).setDepth(4);
+    const bottomBacking = this.add.image(0, 480, 'black_bg').setOrigin(0, 0).setScale(1.5, 0.6).setDepth(4);
+    topBacking.setAlpha(1, 1, 0.8, 0.8);
+    bottomBacking.setAlpha(0.8, 0.8, 1, 1);
 
     // Container creation
     const cont1 = this.add.container();
@@ -45,11 +46,13 @@ export default class EndScene extends Phaser.Scene {
     const cont3 = this.add.container();
     const cont4 = this.add.container();
     const achievementsStorage = this.add.container()
+
     // condensed property names 
     const DA = this.destroyedAsteroids;
     const energy = this.energyUsage;
     const lvl = this.level;
     const score = this.score;
+
     // condensed data name - json path
     const asteroidData = achiData.asteroidAchievements;
     const energyData = achiData.energyAchievements;
@@ -66,16 +69,19 @@ export default class EndScene extends Phaser.Scene {
     else if (DA >= 30 && DA < 50) achi.call(this, dataCall(asteroidData, 2), cont1);
     else if (DA >= 50 && DA < 75) achi.call(this, dataCall(asteroidData, 3), cont1);
     else if (DA >= 75) achi.call(this, dataCall(asteroidData, 4), cont1);
+
     // Energy Achievements
     if (energy >= 100 && energy < 200) achi.call(this, dataCall(energyData, 1), cont2);
     else if (energy >= 200 && energy < 300) achi.call(this, dataCall(energyData, 2), cont2);
     else if (energy >= 300 && energy < 400) achi.call(this, dataCall(energyData, 3), cont2);
     else if (energy >= 500) achi.call(this, dataCall(energyData, 4), cont2);
+
     // Level Achievements
     if (lvl >= 5 && lvl < 10) achi.call(this, dataCall(levelData, 1), cont3);
     else if (lvl >= 10 && lvl < 15) achi.call(this, dataCall(levelData, 2), cont3);
     else if (lvl >= 15 && lvl < 20) achi.call(this, dataCall(levelData, 3), cont3);
     else if (lvl >= 20) achi.call(this, dataCall(levelData, 4), cont3);
+
     // Score Achievements
     if (score >= 1000 && score < 2000) achi.call(this, dataCall(scoreData, 1), cont4);
     else if (score >= 2000 && score < 3000) achi.call(this, dataCall(scoreData, 2), cont4);
@@ -107,25 +113,27 @@ export default class EndScene extends Phaser.Scene {
       level.setPosition((bg.width / 2) - (level.displayWidth / 2), (bg.height / 2) - level.height - 5);
     }
 
-    const cont = achievementsStorage.list
-    const centerX = this.cameras.main.width / 2;
-    console.log(centerX);
+    // sets position of the container
     achievementsStorage.setPosition(45, 100);
+
+    // condenced container list variable
+    const cont = achievementsStorage.list
+
+    // initialize padding variable
+    // loop through container objects 
+    // sets their position acording to padding variable for y axis
+    // increases padding for space between achievements
     let padding = 0;
     for (let i = 0; i < cont.length; i++) {
       cont[i].setPosition(0, padding);
       padding += 140;
     };
-    achievementsStorage
 
+    // scroll wheel interactivity 
     this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
       achievementsStorage.x += deltaX * 0.2;
       achievementsStorage.y += deltaY * 0.2;
     });
-
-
-
-
 
     // creates menu button - adds interactive events
     // starts the next scene and stops the current one
