@@ -1,3 +1,5 @@
+// weapon class - matter sprite
+// adds physical properties to the weapon
 export default class Weapon extends Phaser.Physics.Matter.Sprite {
   constructor(world, x, y, texture) {
     super(world, x, y, texture);
@@ -18,9 +20,15 @@ export default class Weapon extends Phaser.Physics.Matter.Sprite {
       blendMode: 'ADD',
     };
   }
+
+  // loads the particle image so it's ready for when its needed 
   preload() {
     this.load.image('red', 'assets/GameObjects/red_particle.png');
   }
+
+  // fire function to launch a bullet - adds the physical body and properties to the world 
+  // sets variables for movment
+  // creates particle emiiter 
   fire(x, y) {
     this.world.add(this.body);
     this.setAngularVelocity(0);
@@ -37,7 +45,7 @@ export default class Weapon extends Phaser.Physics.Matter.Sprite {
       .startFollow(this);
   }
 
-
+  // on bullet life span end - remove it from the world and explode the emitter 
   preUpdate(time, delta) {
     super.preUpdate(time, delta);
     this.lifespan -= delta;
