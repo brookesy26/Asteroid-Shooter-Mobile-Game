@@ -11,7 +11,6 @@ export default class MainMenu extends Phaser.Scene {
     this.load.image('purple_bg', 'assets/ui/darkPurple.png');
     this.load.image('headingBox', 'assets/ui/HeadingBackground.png');
     this.load.image('playBox', 'assets/ui/PlayButton.png');
-    this.load.image('arrow', 'assets/ui/arrow.png');
   }
 
   create() {
@@ -93,3 +92,4 @@ export default class MainMenu extends Phaser.Scene {
     });
   }
 }
+

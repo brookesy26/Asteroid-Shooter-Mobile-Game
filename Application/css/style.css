@@ -11,6 +11,10 @@
   margin: 0;
 }
 
+h1 {
+  margin-top: 10px;
+}
+
 /* 
 Adds font family and backing image
 set up page layout and structure 

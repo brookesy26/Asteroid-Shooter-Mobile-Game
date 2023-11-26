@@ -78,6 +78,7 @@ export default class GameScene extends Phaser.Scene {
     this.load.image('energyBar', 'assets/ui/energyBar.png');
     this.load.image('smallMet', 'assets/GameObjects/SmallMet.png')
     this.load.image('largeMet', 'assets/GameObjects/LargeMet.png')
+    this.load.image('arrow', 'assets/ui/arrow.png');
   }
 
   create() {
@@ -128,7 +129,7 @@ export default class GameScene extends Phaser.Scene {
       gameHeight - 35,
       'ship',
       'red',
-    );
+    ).setDepth(10);
 
     //Ship Collision detection - if ship hits wall log it, else (hits a asteroid) end the game
     // removes the specific rock the ship collided with / runs end game function
@@ -202,6 +203,69 @@ export default class GameScene extends Phaser.Scene {
         }
       })
     };
+
+    const touchRight = this.add.image(250, 330, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive();
+    const touchLeft = this.add.image(-170, 330, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive();
+    const touchMiddle = this.add.image(0, 330, 'purple_bg').setOrigin(0, 0).setDepth(-2).setInteractive();
+
+    touchRight.on('pointerdown', () => {
+      if (this.energy > 0) {
+        this.thrustEvent = this.time.addEvent({
+          callback: () => {
+            this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
+            this.energy -= this.gameModeSelected.thrustEnergyCost;
+            this.energyMeter.scaleX = this.energy / 100;
+            this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
+          },
+          delay: 5,
+          callbackScope: this,
+          loop: true
+        });
+      }
+    });
+    // touch controls for right side
+    touchRight.on('pointerup', () => {
+      if (this.thrustEvent) {
+        this.thrustEvent.destroy();
+      }
+    });
+
+
+    touchLeft.on('pointerdown', () => {
+      if (this.energy > 0) {
+        this.thrustEvent = this.time.addEvent({
+          callback: () => {
+            this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
+            this.energy -= this.gameModeSelected.thrustEnergyCost;
+            this.energyMeter.scaleX = this.energy / 100;
+            this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
+          },
+          delay: 5,
+          callbackScope: this,
+          loop: true
+        });
+      }
+    });
+    touchLeft.on('pointerup', () => {
+      if (this.thrustEvent) {
+        this.thrustEvent.destroy();
+      }
+    });
+
+
+    touchMiddle.on('pointerdown', () => {
+      if (this.energy > 10 && this.playerShip.active) {
+        const weaponObject = this.missileStorage.find(Missile => !Missile.active);
+        if (weaponObject && this.time.now >= this.timePast) {
+          weaponObject.fire(this.playerShip.x, this.playerShip.y - 20);
+          this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
+          this.energy -= this.gameModeSelected.weaponEnergyCost;
+          this.energyUsageTracking += this.gameModeSelected.weaponEnergyCost;
+          this.energyMeter.scaleX = this.energy / 100;
+        }
+      }
+    })
+
 
     //creates the key controlls and enables them
     this.controls = this.input.keyboard.addKeys('UP,LEFT,RIGHT');
