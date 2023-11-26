@@ -4,6 +4,11 @@
   margin: 0;
 }
 
+@font-face {
+  font-family: 'KenVector Future';
+  src: url('../assets/Font/kenvector_future.ttf') format('ttf');
+}
+
 /* 
 Adds font family and backing image
 set up page layout and structure 
