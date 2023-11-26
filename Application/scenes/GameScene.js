@@ -204,70 +204,47 @@ export default class GameScene extends Phaser.Scene {
       })
     };
 
+    // touch control areas for detection, left, right, middle
     const touchRight = this.add.image(250, 330, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive();
     const touchLeft = this.add.image(-170, 330, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive();
     const touchMiddle = this.add.image(0, 330, 'purple_bg').setOrigin(0, 0).setDepth(-2).setInteractive();
 
+    // input event for pointer down (works same for touch)
+    // adds time event with a small delay to repeat the callback function while pointer is down
     touchRight.on('pointerdown', () => {
       if (this.energy > 0) {
         this.thrustEvent = this.time.addEvent({
-          callback: () => {
-            this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
-            this.energy -= this.gameModeSelected.thrustEnergyCost;
-            this.energyMeter.scaleX = this.energy / 100;
-            this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
-          },
+          callback: this.rightControl,
           delay: 5,
           callbackScope: this,
           loop: true
         });
       }
     });
-    // touch controls for right side
-    touchRight.on('pointerup', () => {
-      if (this.thrustEvent) {
-        this.thrustEvent.destroy();
-      }
-    });
 
+    // removes the time event on pointer up
+    touchRight.on('pointerup', () => { if (this.thrustEvent) this.thrustEvent.destroy() });
 
+    // input event for pointer down (works same for touch)
+    // adds time event with a small delay to repeat the callback function while pointer is down
     touchLeft.on('pointerdown', () => {
       if (this.energy > 0) {
         this.thrustEvent = this.time.addEvent({
-          callback: () => {
-            this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
-            this.energy -= this.gameModeSelected.thrustEnergyCost;
-            this.energyMeter.scaleX = this.energy / 100;
-            this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
-          },
+          callback: this.leftControl,
           delay: 5,
           callbackScope: this,
           loop: true
         });
       }
-    });
-    touchLeft.on('pointerup', () => {
-      if (this.thrustEvent) {
-        this.thrustEvent.destroy();
-      }
-    });
-
-
-    touchMiddle.on('pointerdown', () => {
-      if (this.energy > 10 && this.playerShip.active) {
-        const weaponObject = this.missileStorage.find(Missile => !Missile.active);
-        if (weaponObject && this.time.now >= this.timePast) {
-          weaponObject.fire(this.playerShip.x, this.playerShip.y - 20);
-          this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
-          this.energy -= this.gameModeSelected.weaponEnergyCost;
-          this.energyUsageTracking += this.gameModeSelected.weaponEnergyCost;
-          this.energyMeter.scaleX = this.energy / 100;
-        }
-      }
     })
 
+    // removes the time event on pointer up
+    touchLeft.on('pointerup', () => { if (this.thrustEvent) this.thrustEvent.destroy() });
 
-    //creates the key controlls and enables them
+    // input event for pointer down on middle of screen, calls weapon controls
+    touchMiddle.on('pointerdown', () => { if (this.energy > 10 && this.playerShip.active) this.weaponControl() });
+
+    // creates the key controlls and enables them
     this.controls = this.input.keyboard.addKeys('UP,LEFT,RIGHT');
     this.input.keyboard.enabled = true;
 
@@ -277,6 +254,38 @@ export default class GameScene extends Phaser.Scene {
     emitter.emit('level1', this.gameModeSelected.timeDelay);
   };
 
+  // energy meter adjustments based on consumption
+  energyReduce() {
+    this.energy -= this.gameModeSelected.thrustEnergyCost;
+    this.energyMeter.scaleX = this.energy / 100;
+    this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
+  };
+
+  // calls thrust left and energy reduce functions
+  leftControl() {
+    this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
+    this.energyReduce();
+  };
+
+  // calls thrust right and energy reduce functions
+  rightControl() {
+    this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
+    this.energyReduce();
+  };
+
+  // checks for un-active bullet / returns the object
+  // call fire function within weapon class
+  // checks current time vs amount past since last fire - for fire speed
+  // energy consumption updates
+  weaponControl() {
+    const weaponObject = this.missileStorage.find(Missile => !Missile.active);
+    if (weaponObject && this.time.now >= this.timePast) {
+      weaponObject.fire(this.playerShip.x, this.playerShip.y - 20);
+      this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
+      this.energyReduce();
+    }
+  };
+
   // removes current time event
   // calls new time event with new delay
   // increases velocity of asteroids
@@ -284,7 +293,7 @@ export default class GameScene extends Phaser.Scene {
     this.timing.remove()
     this.handler(this.gameModeSelected.timeDelay -= 100);
     this.gameModeSelected.velocity += 0.1;
-  }
+  };
 
   // time event handler
   handler(delay) {
@@ -295,7 +304,7 @@ export default class GameScene extends Phaser.Scene {
       loop: true
     });
     return this.timing
-  }
+  };
 
   //Create new Asteroid in random location between 20 - 320 above the top screen and adds them to an array
   newAsteroid() {
@@ -334,42 +343,25 @@ export default class GameScene extends Phaser.Scene {
       // stop this scene
       this.scene.stop();
     });
-  }
+  };
 
   update(time, delta) {
     // controls for movement and weapons
     // Movement right ->
     // energy bar consumption updates
     if (this.controls.RIGHT.isDown && this.energy > 0) {
-      this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
-      this.energy -= this.gameModeSelected.thrustEnergyCost;
-      this.energyMeter.scaleX = this.energy / 100;
-      this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
+      this.rightControl();
     }
 
     // Movement left <-
     // energy bar consumption updates
     else if (this.controls.LEFT.isDown && this.energy > 0) {
-      this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
-      this.energy -= this.gameModeSelected.thrustEnergyCost;
-      this.energyMeter.scaleX = this.energy / 100;
-      this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
+      this.leftControl();
     }
 
     // control for weapon fire on up button - minimum energy 10 
-    // checks for un-active bullet / returns the object
-    // call fire function within weapon class
-    // checks current time vs amount past since last fire - for fire speed
-    // energy consumption updates
     if (this.controls.UP.isDown && this.energy > 10 && this.playerShip.active) {
-      const weaponObject = this.missileStorage.find(Missile => !Missile.active);
-      if (weaponObject && time >= this.timePast) {
-        weaponObject.fire(this.playerShip.x, this.playerShip.y - 20);
-        this.timePast = time + this.gameModeSelected.fireSpeed;
-        this.energy -= this.gameModeSelected.weaponEnergyCost;
-        this.energyUsageTracking += this.gameModeSelected.weaponEnergyCost;
-        this.energyMeter.scaleX = this.energy / 100;
-      }
+      this.weaponControl();
     }
 
     // stops the energy bar from going above 100% (Scale 1)
