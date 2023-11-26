@@ -37,7 +37,7 @@ export default class Weapon extends Phaser.Physics.Matter.Sprite {
     this.setY(y - 8);
     this.setActive(true);
     this.setVisible(true);
-    this.setVelocityY(-8);
+    this.setVelocityY(-5);
     this.setVelocityX(0);
     this.lifespan = 1100;
     this.emitter = this.scene.add.particles('red')
