@@ -150,28 +150,28 @@ export default class GameScene extends Phaser.Scene {
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down
     touchRight.on('pointerdown', () => {
-      if (this.energy > 0) {
-        this.thrustEvent = this.time.addEvent({
-          callback: () => {
+      this.thrustEvent = this.time.addEvent({
+        callback: () => {
+          if (this.energy > 0) {
             this.rightControl();
             this.thrustUsage();
-          },
-          delay: 5,
-          callbackScope: this,
-          loop: true
-        });
-
-        // Check for pointer out event to destroy the time event
-        touchRight.on('pointerout', () => {
-          if (this.thrustEvent) {
-            this.thrustEvent.destroy();
           }
-        });
-      }
+        },
+        delay: 5,
+        callbackScope: this,
+        loop: true
+      });
+
+      // Check for pointer out event to destroy the time event
+      touchRight.on('pointerout', () => {
+        if (this.thrustEvent) {
+          this.thrustEvent.destroy();
+        }
+      });
     });
 
     // removes the time event on pointer up
-    touchLeft.on('pointerup', () => {
+    touchRight.on('pointerup', () => {
       if (this.thrustEvent) {
         this.thrustEvent.destroy();
       }
@@ -181,24 +181,24 @@ export default class GameScene extends Phaser.Scene {
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down.
     touchLeft.on('pointerdown', () => {
-      if (this.energy > 0) {
-        this.thrustEvent = this.time.addEvent({
-          callback: () => {
+      this.thrustEvent = this.time.addEvent({
+        callback: () => {
+          if (this.energy > 0) {
             this.leftControl();
             this.thrustUsage();
-          },
-          delay: 5,
-          callbackScope: this,
-          loop: true
-        });
-
-        // Check for pointer out event to destroy the time event
-        touchLeft.on('pointerout', () => {
-          if (this.thrustEvent) {
-            this.thrustEvent.destroy();
           }
-        });
-      }
+        },
+        delay: 5,
+        callbackScope: this,
+        loop: true
+      });
+
+      // Check for pointer out event to destroy the time event
+      touchLeft.on('pointerout', () => {
+        if (this.thrustEvent) {
+          this.thrustEvent.destroy();
+        }
+      });
     });
 
     // removes the time event on pointer up
