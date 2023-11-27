@@ -47,10 +47,15 @@ export default class HowToPlay extends Phaser.Scene {
     this.add.text(24, 270, 'Weapons', headingStyle);
     this.add.text(24, 295, 'Energy missiles', textStyle);
 
-    //player controls text
-    this.add.text(24, 325, 'Controls', headingStyle);
+    //player keyboard controls text
+    this.add.text(24, 325, 'Keyboard Controls', headingStyle);
     this.add.text(24, 350, 'energy Weapon', textStyle);
     this.add.text(24, 375, 'Movement', textStyle);
+
+    //player touch controls text
+    this.add.text(24, 405, 'Touch Controls', headingStyle);
+    this.add.text(24, 430, 'energy Weapon:   middle', textStyle);
+    this.add.text(24, 455, 'Movement:   left and right ', textStyle);
 
     //player controls arrows    
     this.add.image(230, 347, 'arrow').setOrigin(0, 0).setScale(0.8).setAngle(90);

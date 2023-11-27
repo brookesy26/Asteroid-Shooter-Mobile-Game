@@ -30,16 +30,16 @@ export default class Weapon extends Phaser.Physics.Matter.Sprite {
   // sets variables for movment
   // creates particle emiiter 
   fire(x, y) {
-    this.world.add(this.body);
     this.setAngularVelocity(0);
     this.setFixedRotation(Infinity);
     this.setX(x);
     this.setY(y - 8);
     this.setActive(true);
     this.setVisible(true);
-    this.setVelocityY(-5);
+    this.world.add(this.body);
+    this.setVelocityY(-7);
     this.setVelocityX(0);
-    this.lifespan = 1100;
+    this.lifespan = 1200;
     this.emitter = this.scene.add.particles('red')
       .createEmitter(this.particleConfig)
       .startFollow(this);

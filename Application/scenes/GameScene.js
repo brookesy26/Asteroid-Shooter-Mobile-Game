@@ -54,8 +54,6 @@ export default class GameScene extends Phaser.Scene {
     this.scoreText;
     this.playerShip;
     this.controls;
-    this.missile;
-    this.missileStorage = [];
     this.rocks = [];
     this.timePast = 0;
     this.energyMeter;
@@ -96,7 +94,6 @@ export default class GameScene extends Phaser.Scene {
     }
     // logging game mode
     console.log(`the game mode has been changed to ${this.modeSelected}`);
-
     // world bounding walls - left, right, top, bottom
     this.matter.world.setBounds(0, 0, 340, 600, 64, true, true, false, false);
 
@@ -145,70 +142,10 @@ export default class GameScene extends Phaser.Scene {
       }
     });
 
-    // Missile spawning / storage
-    for (let i = 0; i < 100; i++) {
-      this.missile = new Weapon(
-        this.matter.world,
-        this.playerShip.x,
-        this.playerShip.y,
-        'rocket',
-      );
-      this.missileStorage.push(this.missile);
-
-      //missile collision detection - if hits an asteroid
-      this.missile.setOnCollide((collisionDataObject) => {
-        const missile = collisionDataObject.bodyA.gameObject;
-        const asteroid = collisionDataObject.bodyB.gameObject;
-        missile.setActive(false);
-        missile.setVisible(false);
-        missile.world.remove(missile.body, true);
-        asteroid.setActive(false);
-        asteroid.setVisible(false);
-        asteroid.world.remove(asteroid.body, true);
-        missile.emitter.explode(15, 0, 0);
-
-        //score update
-        this.scoreText.setText(`Score: ${this.playerScore += 10}`);
-        this.asteroidsDestroyed += 1;
-
-        // Player level check for every time score goes over 100
-        // level text update 
-        // runs level up difficulty function every 5 levels up to 40
-        if (this.playerScore - this.scoreCheck >= 100) {
-          this.levelText.setText(`L ${this.playerLevel += 1}`);
-          this.scoreCheck = this.playerScore;
-          switch (this.playerLevel) {
-            case 5:
-              this.levelUpDifficulty();
-              break;
-            case 10:
-              this.levelUpDifficulty();
-              break;
-            case 15:
-              this.levelUpDifficulty();
-              break;
-            case 20:
-              this.levelUpDifficulty();
-              break;
-            case 25:
-              this.levelUpDifficulty();
-              break;
-            case 30:
-              this.levelUpDifficulty();
-              break;
-            case 40:
-              this.levelUpDifficulty();
-              break;
-          }
-        }
-      })
-    };
-
     // touch control areas for detection, left, right, middle
-    const touchRight = this.add.image(250, 330, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive();
-    const touchLeft = this.add.image(-170, 330, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive();
-    const touchMiddle = this.add.image(0, 330, 'purple_bg').setOrigin(0, 0).setDepth(-2).setInteractive();
-
+    const touchRight = this.add.image(250, 0, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive().setScale(1, 3);
+    const touchLeft = this.add.image(-170, 0, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive().setScale(1, 3);
+    const touchMiddle = this.add.image(85, 0, 'purple_bg').setOrigin(0, 0).setDepth(-2).setInteractive().setScale(0.7, 3);
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down
     touchRight.on('pointerdown', () => {
@@ -241,8 +178,20 @@ export default class GameScene extends Phaser.Scene {
     // removes the time event on pointer up
     touchLeft.on('pointerup', () => { if (this.thrustEvent) this.thrustEvent.destroy() });
 
-    // input event for pointer down on middle of screen, calls weapon controls
-    touchMiddle.on('pointerdown', () => { if (this.energy > 10 && this.playerShip.active) this.weaponControl() });
+    // input event for pointer down on middle of screen
+    // runs through the process of weapon fire, collision, and updates
+    // checks the current time against the time that has past for fire rate control
+    touchMiddle.on('pointerdown', () => {
+      if (this.energy > 10 && this.playerShip.active) {
+        if (this.time.now >= this.timePast) {
+          const bullet = this.bulletCreation();
+          this.firingBullet(bullet);
+          this.weaponFireUsage();
+          this.bulletCollision(bullet);
+          this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
+        }
+      }
+    });
 
     // creates the key controlls and enables them
     this.controls = this.input.keyboard.addKeys('UP,LEFT,RIGHT');
@@ -254,37 +203,72 @@ export default class GameScene extends Phaser.Scene {
     emitter.emit('level1', this.gameModeSelected.timeDelay);
   };
 
-  // energy meter adjustments based on consumption
-  energyReduce() {
+  // energy meter adjustments based on consumption of thrust
+  thrustUsage() {
     this.energy -= this.gameModeSelected.thrustEnergyCost;
     this.energyMeter.scaleX = this.energy / 100;
     this.energyUsageTracking += this.gameModeSelected.thrustEnergyCost;
   };
 
-  // calls thrust left and energy reduce functions
+  // energy meter adjustments based on consumption of weapon
+  weaponFireUsage() {
+    this.energy -= this.gameModeSelected.weaponEnergyCost;
+    this.energyMeter.scaleX = this.energy / 100;
+    this.energyUsageTracking += this.gameModeSelected.weaponEnergyCost;
+  };
+
+  // calls thrust left
   leftControl() {
     this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
-    this.energyReduce();
   };
 
-  // calls thrust right and energy reduce functions
+  // calls thrust right
   rightControl() {
     this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
-    this.energyReduce();
   };
 
-  // checks for un-active bullet / returns the object
-  // call fire function within weapon class
-  // checks current time vs amount past since last fire - for fire speed
-  // energy consumption updates
-  weaponControl() {
-    const weaponObject = this.missileStorage.find(Missile => !Missile.active);
-    if (weaponObject && this.time.now >= this.timePast) {
-      weaponObject.fire(this.playerShip.x, this.playerShip.y - 20);
-      this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
-      this.energyReduce();
-    }
+  // creates a new weapon object ands returns it
+  bulletCreation() {
+    const bullet = new Weapon(this.matter.world, this.playerShip.x, this.playerShip.y, 'rocket');
+    console.log('bullet Created');
+    return bullet;
   };
+
+  // takes in the collision item to be tested, runs the collision detection for missiles and asteroids colliding
+  // calls usedBullets to destroy the given bullet
+  // removes the asteroid from the world
+  // explodes the bullets emmiter
+  // updates score, score text, and amount of asteroids destroyed
+  // calls level up conditions to determin if the player has gained enough poits to level up
+  bulletCollision(bullet) {
+    bullet.setOnCollide((collisionDataObject) => {
+      const missile = collisionDataObject.bodyA.gameObject;
+      const asteroid = collisionDataObject.bodyB.gameObject;
+      this.usedBullet(missile);
+      asteroid.setActive(false);
+      asteroid.setVisible(false);
+      asteroid.world.remove(asteroid.body, true);
+      bullet.emitter.explode(15, 0, 0);
+      console.log('after');
+      console.log(missile);
+      this.scoreText.setText(`Score: ${this.playerScore += 10}`);
+      this.asteroidsDestroyed += 1;
+      this.levelUpConditions();
+    });
+  }
+
+  // calls the weapon class fire function to fire the given bullet
+  firingBullet(bullet) {
+    bullet.fire(this.playerShip.x, this.playerShip.y - 20);
+    console.log('fired');
+  }
+
+  // removes given item from the world
+  usedBullet(item) {
+    item.setActive(false);
+    item.setVisible(false);
+    item.world.remove(item.body, true);
+  }
 
   // removes current time event
   // calls new time event with new delay
@@ -294,6 +278,39 @@ export default class GameScene extends Phaser.Scene {
     this.handler(this.gameModeSelected.timeDelay -= 100);
     this.gameModeSelected.velocity += 0.1;
   };
+
+  // Player level check for every time score goes over 100
+  // level text update 
+  // runs level up difficulty function every 5 levels up to 40
+  levelUpConditions() {
+    if (this.playerScore - this.scoreCheck >= 100) {
+      this.levelText.setText(`L ${this.playerLevel += 1}`);
+      this.scoreCheck = this.playerScore;
+      switch (this.playerLevel) {
+        case 5:
+          this.levelUpDifficulty();
+          break;
+        case 10:
+          this.levelUpDifficulty();
+          break;
+        case 15:
+          this.levelUpDifficulty();
+          break;
+        case 20:
+          this.levelUpDifficulty();
+          break;
+        case 25:
+          this.levelUpDifficulty();
+          break;
+        case 30:
+          this.levelUpDifficulty();
+          break;
+        case 40:
+          this.levelUpDifficulty();
+          break;
+      }
+    }
+  }
 
   // time event handler
   handler(delay) {
@@ -306,7 +323,7 @@ export default class GameScene extends Phaser.Scene {
     return this.timing
   };
 
-  //Create new Asteroid in random location between 20 - 320 above the top screen and adds them to an array
+  // Create new Asteroid in random location between 20 - 320 above the top screen and adds them to an array
   newAsteroid() {
     let x = Phaser.Math.Between(20, 320);
     let rock;
@@ -314,7 +331,7 @@ export default class GameScene extends Phaser.Scene {
     this.rocks.push(rock);
   };
 
-  // End Game function removes ship, explodes emitter, adds engame text / image
+  // End Game function removes ship, explodes emitter, adds end game text / image
   endGame() {
     this.input.keyboard.enabled = false;
     this.playerShip.setActive(false);
@@ -330,7 +347,7 @@ export default class GameScene extends Phaser.Scene {
     menuButton.on('pointerover', () => menuButton.setTint(0x00FF00));
     menuButton.on('pointerout', () => menuButton.clearTint());
 
-    // on click start the next scene and pass over these variables
+    // on click start the next scene and pass over these variables as an object
     menuButton.on('pointerdown', () => {
       this.scene.start('EndScene',
         {
@@ -351,18 +368,28 @@ export default class GameScene extends Phaser.Scene {
     // energy bar consumption updates
     if (this.controls.RIGHT.isDown && this.energy > 0) {
       this.rightControl();
+      this.thrustUsage();
     }
 
     // Movement left <-
     // energy bar consumption updates
     else if (this.controls.LEFT.isDown && this.energy > 0) {
       this.leftControl();
+      this.thrustUsage();
     }
 
-    // control for weapon fire on up button - minimum energy 10 
+    // up key controls 
+    // runs through the process of weapon fire, collision, and updates
+    // checks the current time against the time that has past for fire rate control
     if (this.controls.UP.isDown && this.energy > 10 && this.playerShip.active) {
-      this.weaponControl();
-    }
+      if (this.time.now >= this.timePast) {
+        const bullet = this.bulletCreation();
+        this.firingBullet(bullet);
+        this.weaponFireUsage();
+        this.bulletCollision(bullet);
+        this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
+      }
+    };
 
     // stops the energy bar from going above 100% (Scale 1)
     if (this.energy < 100) {
