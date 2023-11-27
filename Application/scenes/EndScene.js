@@ -45,7 +45,7 @@ export default class EndScene extends Phaser.Scene {
     const cont2 = this.add.container();
     const cont3 = this.add.container();
     const cont4 = this.add.container();
-    const achievementsStorage = this.add.container()
+    const achievementsStorage = this.add.container();
 
     // condensed property names 
     const DA = this.destroyedAsteroids;
@@ -117,7 +117,7 @@ export default class EndScene extends Phaser.Scene {
     achievementsStorage.setPosition(45, 100);
 
     // condenced container list variable
-    const cont = achievementsStorage.list
+    const cont = achievementsStorage.list;
 
     // initialize padding variable
     // loop through container objects 
@@ -133,6 +133,31 @@ export default class EndScene extends Phaser.Scene {
     this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
       achievementsStorage.x += deltaX * 0.2;
       achievementsStorage.y += deltaY * 0.2;
+    });
+
+    // scrolling for touch
+    let isScrolling = false;
+    let pointerStartPosition = 0;
+
+    // detects pointer down, setting inital y start location of the pointer
+    this.input.on('pointerdown', (pointer) => {
+      isScrolling = true;
+      pointerStartPosition = pointer.y;
+    });
+
+    // calculates the distance the container needs to be moved along the y, 
+    // by minusing the current y position by the original on clicked one
+    this.input.on('pointermove', (pointer) => {
+      if (isScrolling) {
+        const deltaY = pointer.y - pointerStartPosition;
+        achievementsStorage.y += deltaY * 1;
+        pointerStartPosition = pointer.y;
+      }
+    });
+
+    // resets the pointer scrolling when cursor is up
+    this.input.on('pointerup', () => {
+      isScrolling = false;
     });
 
     // creates menu button - adds interactive events

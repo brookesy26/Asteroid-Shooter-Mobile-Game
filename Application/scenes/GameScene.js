@@ -34,8 +34,8 @@ export default class GameScene extends Phaser.Scene {
     };
     this.hardObject = {
       fireSpeed: 200,
-      velocity: 1.5,
-      timeDelay: 600,
+      velocity: 2,
+      timeDelay: 700,
       energyRegen: 0.5,
       weaponEnergyCost: 5,
       thrustEnergyCost: 1,
@@ -150,30 +150,32 @@ export default class GameScene extends Phaser.Scene {
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down
     touchRight.on('pointerdown', () => {
-      if (this.energy > 0) {
-        this.thrustEvent = this.time.addEvent({
-          callback: () => {
+      this.thrustEvent = this.time.addEvent({
+        callback: () => {
+          if (this.energy > 0) {
             this.rightControl();
             this.thrustUsage();
-          },
-          delay: 5,
-          callbackScope: this,
-          loop: true
-        });
-
-        // Check for pointer out event to destroy the time event
-        touchRight.on('pointerout', () => {
-          if (this.thrustEvent) {
-            this.thrustEvent.destroy();
           }
-        });
-      }
+        },
+        delay: 5,
+        callbackScope: this,
+        loop: true
+      });
+
+      // Check for pointer out event to destroy the time event
+      touchRight.on('pointerout', () => {
+        if (this.thrustEvent) {
+          this.thrustEvent.destroy();
+          return 'thrust event destroyed';
+        }
+      });
     });
 
     // removes the time event on pointer up
-    touchLeft.on('pointerup', () => {
+    touchRight.on('pointerup', () => {
       if (this.thrustEvent) {
         this.thrustEvent.destroy();
+        return 'thrust event destroyed';
       }
     });
 
@@ -181,31 +183,35 @@ export default class GameScene extends Phaser.Scene {
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down.
     touchLeft.on('pointerdown', () => {
-      if (this.energy > 0) {
-        this.thrustEvent = this.time.addEvent({
-          callback: () => {
+      this.thrustEvent = this.time.addEvent({
+        callback: () => {
+          if (this.energy > 0) {
             this.leftControl();
             this.thrustUsage();
-          },
-          delay: 5,
-          callbackScope: this,
-          loop: true
-        });
-
-        // Check for pointer out event to destroy the time event
-        touchLeft.on('pointerout', () => {
-          if (this.thrustEvent) {
-            this.thrustEvent.destroy();
           }
-        });
-      }
+        },
+        delay: 5,
+        callbackScope: this,
+        loop: true
+      });
+
+      // Check for pointer out event to destroy the time event
+      touchLeft.on('pointerout', () => {
+        if (this.thrustEvent) {
+          this.thrustEvent.destroy();
+          return 'thrust event destroyed';
+        }
+      });
+      return 'pointer down on left true';
     });
 
     // removes the time event on pointer up
     touchLeft.on('pointerup', () => {
       if (this.thrustEvent) {
         this.thrustEvent.destroy();
+        return 'thrust event destroyed';
       }
+      return 'left pointer up true';
     });
 
 
@@ -222,6 +228,7 @@ export default class GameScene extends Phaser.Scene {
           this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
         }
       }
+      return 'pointer down on middle true';
     });
 
     // creates the key controlls and enables them
