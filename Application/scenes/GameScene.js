@@ -179,7 +179,7 @@ export default class GameScene extends Phaser.Scene {
 
 
     // input event for pointer down (works same for touch)
-    // adds time event with a small delay to repeat the callback function while pointer is down
+    // adds time event with a small delay to repeat the callback function while pointer is down.
     touchLeft.on('pointerdown', () => {
       if (this.energy > 0) {
         this.thrustEvent = this.time.addEvent({
