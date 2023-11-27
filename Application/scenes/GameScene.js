@@ -146,37 +146,68 @@ export default class GameScene extends Phaser.Scene {
     const touchRight = this.add.image(250, 0, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive().setScale(1, 3);
     const touchLeft = this.add.image(-170, 0, 'purple_bg').setOrigin(0, 0).setDepth(-1).setInteractive().setScale(1, 3);
     const touchMiddle = this.add.image(85, 0, 'purple_bg').setOrigin(0, 0).setDepth(-2).setInteractive().setScale(0.7, 3);
+
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down
     touchRight.on('pointerdown', () => {
       if (this.energy > 0) {
         this.thrustEvent = this.time.addEvent({
-          callback: this.rightControl,
+          callback: () => {
+            this.rightControl();
+            this.thrustUsage();
+          },
           delay: 5,
           callbackScope: this,
           loop: true
+        });
+
+        // Check for pointer out event to destroy the time event
+        touchRight.on('pointerout', () => {
+          if (this.thrustEvent) {
+            this.thrustEvent.destroy();
+          }
         });
       }
     });
 
     // removes the time event on pointer up
-    touchRight.on('pointerup', () => { if (this.thrustEvent) this.thrustEvent.destroy() });
+    touchLeft.on('pointerup', () => {
+      if (this.thrustEvent) {
+        this.thrustEvent.destroy();
+      }
+    });
+
 
     // input event for pointer down (works same for touch)
-    // adds time event with a small delay to repeat the callback function while pointer is down
+    // adds time event with a small delay to repeat the callback function while pointer is down.
     touchLeft.on('pointerdown', () => {
       if (this.energy > 0) {
         this.thrustEvent = this.time.addEvent({
-          callback: this.leftControl,
+          callback: () => {
+            this.leftControl();
+            this.thrustUsage();
+          },
           delay: 5,
           callbackScope: this,
           loop: true
         });
+
+        // Check for pointer out event to destroy the time event
+        touchLeft.on('pointerout', () => {
+          if (this.thrustEvent) {
+            this.thrustEvent.destroy();
+          }
+        });
       }
-    })
+    });
 
     // removes the time event on pointer up
-    touchLeft.on('pointerup', () => { if (this.thrustEvent) this.thrustEvent.destroy() });
+    touchLeft.on('pointerup', () => {
+      if (this.thrustEvent) {
+        this.thrustEvent.destroy();
+      }
+    });
+
 
     // input event for pointer down on middle of screen
     // runs through the process of weapon fire, collision, and updates
@@ -219,12 +250,16 @@ export default class GameScene extends Phaser.Scene {
 
   // calls thrust left
   leftControl() {
-    this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
+    if (this.energy > 0) {
+      this.playerShip.thrustLeft(this.gameModeSelected.thrustSpeed);
+    }
   };
 
   // calls thrust right
   rightControl() {
-    this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
+    if (this.energy > 0) {
+      this.playerShip.thrustRight(this.gameModeSelected.thrustSpeed);
+    }
   };
 
   // creates a new weapon object ands returns it
