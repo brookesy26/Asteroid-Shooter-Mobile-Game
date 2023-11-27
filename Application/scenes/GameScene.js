@@ -34,8 +34,8 @@ export default class GameScene extends Phaser.Scene {
     };
     this.hardObject = {
       fireSpeed: 200,
-      velocity: 1.5,
-      timeDelay: 600,
+      velocity: 2,
+      timeDelay: 700,
       energyRegen: 0.5,
       weaponEnergyCost: 5,
       thrustEnergyCost: 1,
@@ -166,6 +166,7 @@ export default class GameScene extends Phaser.Scene {
       touchRight.on('pointerout', () => {
         if (this.thrustEvent) {
           this.thrustEvent.destroy();
+          return 'thrust event destroyed';
         }
       });
     });
@@ -174,6 +175,7 @@ export default class GameScene extends Phaser.Scene {
     touchRight.on('pointerup', () => {
       if (this.thrustEvent) {
         this.thrustEvent.destroy();
+        return 'thrust event destroyed';
       }
     });
 
@@ -197,15 +199,19 @@ export default class GameScene extends Phaser.Scene {
       touchLeft.on('pointerout', () => {
         if (this.thrustEvent) {
           this.thrustEvent.destroy();
+          return 'thrust event destroyed';
         }
       });
+      return 'pointer down on left true';
     });
 
     // removes the time event on pointer up
     touchLeft.on('pointerup', () => {
       if (this.thrustEvent) {
         this.thrustEvent.destroy();
+        return 'thrust event destroyed';
       }
+      return 'left pointer up true';
     });
 
 
@@ -222,6 +228,7 @@ export default class GameScene extends Phaser.Scene {
           this.timePast = this.time.now + this.gameModeSelected.fireSpeed;
         }
       }
+      return 'pointer down on middle true';
     });
 
     // creates the key controlls and enables them
