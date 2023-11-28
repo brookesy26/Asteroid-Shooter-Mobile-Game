@@ -282,11 +282,23 @@ export default class GameScene extends Phaser.Scene {
   // explodes the bullets emmiter
   // updates score, score text, and amount of asteroids destroyed
   // calls level up conditions to determin if the player has gained enough poits to level up
+  // creates an exposion of particles that instantly explodes on collision
   bulletCollision(bullet) {
     bullet.setOnCollide((collisionDataObject) => {
       const missile = collisionDataObject.bodyA.gameObject;
       const asteroid = collisionDataObject.bodyB.gameObject;
       this.usedBullet(missile);
+      const explode = this.add.particles('smallMet').createEmitter({
+        x: asteroid.x,
+        y: asteroid.y,
+        lifespan: 500,
+        speed: 100,
+        scale: { start: 0.5, end: 0 },
+        alpha: 1,
+        maxParticles: 4,
+        blendMode: 1,
+      });
+
       asteroid.setActive(false);
       asteroid.setVisible(false);
       asteroid.world.remove(asteroid.body, true);
