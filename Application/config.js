@@ -8,10 +8,13 @@ import HowToPlay from "./scenes/HowToPlay.js";
 const config =
 {
   type: Phaser.AUTO,
-  width: 340,
-  height: 600,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    parent: 'game-container',
+    width: 340,
+    height: 600,
+  },
   transparent: true,
-  parent: 'body',
   physics: {
     default: 'matter',
     matter: {
