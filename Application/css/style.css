@@ -21,7 +21,7 @@ body {
   font-family: 'gameFont';
   background-image: url('../assets/ui/black.png');
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
@@ -43,7 +43,7 @@ h1 {
 /*canvas container layout and structure*/
 #game-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   margin: 0.5rem 0 1rem 0;
