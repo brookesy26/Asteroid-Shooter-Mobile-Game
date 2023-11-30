@@ -62,8 +62,11 @@ h1 {
 
 /* Adds border around canvas*/
 canvas {
+  box-sizing: border-box;
   border: 2px solid #E86A17;
   border-radius: 12px;
+  height: 100%;
+  width: 100%;
 }
 
 @media (min-width: 450px) {
