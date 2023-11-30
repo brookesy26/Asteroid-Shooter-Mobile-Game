@@ -1,3 +1,13 @@
+:root {
+  --xxs: 0.5rem;
+  --xs: 1rem;
+  --s: 1.5rem;
+  --m: 1rem;
+  --l: 2rem;
+  --xl: 3rem;
+}
+
+
 /* font setup on load of page*/
 @font-face {
   font-family: 'gameFont';
@@ -46,8 +56,8 @@ h1 {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  margin: 0.5rem 0 2rem 0;
-  height: 90%;
+  margin: var(--xxs) 0 var(--l) 0;
+  height: calc(90% - (var(--l) + var(--xxs)));
   width: 95%;
 }
 
@@ -59,10 +69,7 @@ canvas {
 
 @media (min-width: 450px) {
   #game-container {
+    height: calc(90% - (5rem + var(--xxs)));
     margin: 0.5rem 0 5rem 0;
-  }
-
-  h1 {
-    font-size: 4rem;
   }
 }
