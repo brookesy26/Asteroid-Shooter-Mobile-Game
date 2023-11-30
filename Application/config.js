@@ -21,7 +21,7 @@ const config =
       debug: false,
       gravity: {
         x: 0,
-        y: 0
+        y: 0.0001,
       },
     }
   },
