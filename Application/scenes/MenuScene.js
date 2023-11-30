@@ -2,6 +2,8 @@ export default class MainMenu extends Phaser.Scene {
   constructor() {
     //scene key
     super({ key: 'MainMenu' });
+  }
+  init() {
     //mode default set to normal
     this.modeSelected = 'normal';
   }
