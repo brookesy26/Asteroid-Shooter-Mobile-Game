@@ -46,13 +46,23 @@ h1 {
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  margin: 0.5rem 0 1rem 0;
+  margin: 0.5rem 0 2rem 0;
   height: 90%;
-  width: 90%;
+  width: 95%;
 }
 
 /* Adds border around canvas*/
 canvas {
   border: 2px solid #E86A17;
   border-radius: 12px;
+}
+
+@media (min-width: 450px) {
+  #game-container {
+    margin: 0.5rem 0 5rem 0;
+  }
+
+  h1 {
+    font-size: 4rem;
+  }
 }
