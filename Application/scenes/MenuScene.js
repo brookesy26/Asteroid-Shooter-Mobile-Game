@@ -65,7 +65,14 @@ export default class MainMenu extends Phaser.Scene {
     });
 
     // switches scenes - sleeps this one and starts the next - on click
-    howToPlayButton.on('pointerdown', () => this.scene.switch('HowToPlay'));
+    howToPlayButton.on('pointerdown', () => {
+      const elem = document.getElementById("game-container");
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+        this.scene.switch('HowToPlay');
+      }
+    });
+
 
     // play button interactivity
     // sets tint - hover
