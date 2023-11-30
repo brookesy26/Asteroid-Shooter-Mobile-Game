@@ -95,8 +95,7 @@ export default class GameScene extends Phaser.Scene {
     // logging game mode
     console.log(`the game mode has been changed to ${this.modeSelected}`);
     // world bounding walls - left, right, top, bottom
-    this.matter.world.setBounds(0, 0, 340, 600, 64, true, true, false, false);
-
+    const worldProp = this.matter.world.setBounds(0, 0, 340, 600, 64, true, true, false, false);
     // world dimensions
     const gameHeight = this.game.config.height;
     const gameWidth = this.game.config.width;
@@ -380,8 +379,9 @@ export default class GameScene extends Phaser.Scene {
   // Create new Asteroid in random location between 20 - 320 above the top screen and adds them to an array
   newAsteroid() {
     let x = Phaser.Math.Between(20, 320);
+    let y = Phaser.Math.Between(-100, -150);
     let rock;
-    rock = new Asteroid(this.matter.world, x, -100, 'largeMet', this.gameModeSelected.velocity);
+    rock = new Asteroid(this.matter.world, x, y, 'largeMet', this.gameModeSelected.velocity);
     this.rocks.push(rock);
   };
 

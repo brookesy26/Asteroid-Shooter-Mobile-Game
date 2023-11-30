@@ -10,6 +10,7 @@ export default class Weapon extends Phaser.Physics.Matter.Sprite {
     this.setFrictionAir(0);
     this.setScale(0.4);
     this.setMass(10);
+    this.setIgnoreGravity(true);
     this.setAngle(0);
     this.setDepth(1);
     this.setAlpha(1);
@@ -30,6 +31,7 @@ export default class Weapon extends Phaser.Physics.Matter.Sprite {
   // sets variables for movment
   // creates particle emiiter 
   fire(x, y) {
+    this.setIgnoreGravity(true);
     this.setAngularVelocity(0);
     this.setFixedRotation(Infinity);
     this.setX(x);

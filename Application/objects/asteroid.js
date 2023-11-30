@@ -5,12 +5,11 @@ export default class Asteroid extends Phaser.Physics.Matter.Sprite {
     super(world, x, y, texture);
     this.setCircle(45);
     this.scene.add.existing(this);
-    this.setScale(Phaser.Math.Between(6, 10) * 0.1);
+    this.setScale(Phaser.Math.Between(4, 8.5) * 0.1);
     this.setFrictionAir(0);
-    this.setMass(15);
+    this.setMass(this.scale * 100);
     this.setAngularVelocity(0.02);
     this.setVelocityY(velocity);
-    this.setBounce(0.8);
   }
 
   preUpdate(time, delta) {

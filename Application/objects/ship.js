@@ -10,6 +10,7 @@ export default class Ship extends Phaser.Physics.Matter.Sprite {
     this.setAngle(270);
     this.setFrictionAir(0.06);
     this.setMass(50);
+    this.setIgnoreGravity(true);
     this.particleConfig = {
       speed: { onEmit: () => this.body.speed },
       lifespan: { onEmit: () => Phaser.Math.Percent(this.body.speed, 0, 300) * 2000 },
