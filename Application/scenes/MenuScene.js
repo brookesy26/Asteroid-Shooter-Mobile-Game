@@ -29,6 +29,11 @@ export default class MainMenu extends Phaser.Scene {
     //background repeating image 
     this.add.tileSprite(0, 0, 800, 600, 'purple_bg').setOrigin(0, 0);
 
+
+    //game title heading
+    const gameTitle = this.add.text(35, 100, 'Asteroid Game', { font: '28px gameFont', fill: '#ffffff' });
+
+
     //difficulty images and text
     this.add.text(110, 320, 'difficulty', headingStyle);
     this.easyMode = this.add.image(120, 350, 'playBox').setScale(0.5, 0.6).setOrigin(0, 0).setInteractive();

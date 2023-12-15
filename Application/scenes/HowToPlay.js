@@ -1,8 +1,6 @@
 export default class HowToPlay extends Phaser.Scene {
   constructor() {
     super({ key: 'HowToPlay' });
-    this.controlA
-    this.controlD
   }
   preload() {
     // Load assets
@@ -63,7 +61,8 @@ export default class HowToPlay extends Phaser.Scene {
     this.add.image(200, 394, 'arrow').setOrigin(0, 0).setScale(0.8).setAngle(180);
 
     //menu button image and text
-    const menuButton = this.add.image(75, 500, 'playBox').setOrigin(0, 0).setInteractive();
+    const menuButton = this.add.image(75, 500, 'playBox').setOrigin(0, 0);
+    menuButton.setInteractive();
     this.add.text(115, 515, 'Main Menu', textStyle);
 
     // menu button interactibity - sets / clears tint on hover / switches scenes on click

@@ -63,7 +63,7 @@ export default class GameScene extends Phaser.Scene {
     // text objects
     this.GameOver = { font: '32px gameFont', fill: '#E86A17' };
     this.textStyle = { font: '16px gameFont', fill: '#ffffff' };
-
+    this.scoringStyles = { font: '16px gameFont', fill: '#32CD32' };
   }
 
   preload() {
@@ -104,8 +104,8 @@ export default class GameScene extends Phaser.Scene {
     this.add.tileSprite(0, 0, 800, 600, 'purple_bg').setOrigin(0, 0);
 
     // score and levels
-    this.scoreText = this.add.text(10, 10, `Score: 0`, this.textStyle);
-    this.levelText = this.add.text(10, 30, `L 1`, this.textStyle);
+    this.scoreText = this.add.text(10, 10, `Score: 0`, this.scoringStyles).setDepth(100);
+    this.levelText = this.add.text(10, 30, `L 1`, this.scoringStyles).setDepth(100);
 
     // energy level 
     this.energyMeter = this.add.image(30, gameHeight - 14, 'energyBar').setOrigin(0, 0);
@@ -156,7 +156,6 @@ export default class GameScene extends Phaser.Scene {
             this.thrustUsage();
           }
         },
-        delay: 5,
         callbackScope: this,
         loop: true
       });
@@ -174,10 +173,8 @@ export default class GameScene extends Phaser.Scene {
     touchRight.on('pointerup', () => {
       if (this.thrustEvent) {
         this.thrustEvent.destroy();
-        return 'thrust event destroyed';
       }
     });
-
 
     // input event for pointer down (works same for touch)
     // adds time event with a small delay to repeat the callback function while pointer is down.
@@ -189,7 +186,6 @@ export default class GameScene extends Phaser.Scene {
             this.thrustUsage();
           }
         },
-        delay: 5,
         callbackScope: this,
         loop: true
       });
@@ -235,7 +231,7 @@ export default class GameScene extends Phaser.Scene {
     this.input.keyboard.enabled = true;
 
     // Event Emmitter setup - runs the default handler function on game start
-    var emitter = new Phaser.Events.EventEmitter();
+    const emitter = new Phaser.Events.EventEmitter();
     emitter.on('level1', this.handler, this);
     emitter.emit('level1', this.gameModeSelected.timeDelay);
   };
@@ -270,7 +266,11 @@ export default class GameScene extends Phaser.Scene {
 
   // creates a new weapon object ands returns it
   bulletCreation() {
-    const bullet = new Weapon(this.matter.world, this.playerShip.x, this.playerShip.y, 'rocket');
+    const bullet = new Weapon(
+      this.matter.world,
+      this.playerShip.x,
+      this.playerShip.y,
+      'rocket');
     console.log('bullet Created');
     return bullet;
   };
@@ -381,7 +381,12 @@ export default class GameScene extends Phaser.Scene {
     let x = Phaser.Math.Between(20, 320);
     let y = Phaser.Math.Between(-100, -150);
     let rock;
-    rock = new Asteroid(this.matter.world, x, y, 'largeMet', this.gameModeSelected.velocity);
+    rock = new Asteroid(
+      this.matter.world,
+      x,
+      y,
+      'largeMet',
+      this.gameModeSelected.velocity);
     this.rocks.push(rock);
   };
 
@@ -424,7 +429,6 @@ export default class GameScene extends Phaser.Scene {
       this.rightControl();
       this.thrustUsage();
     }
-
     // Movement left <-
     // energy bar consumption updates
     else if (this.controls.LEFT.isDown && this.energy > 0) {
