@@ -47,6 +47,8 @@ h1 {
   font-size: 2rem;
   flex-direction: column;
   justify-content: center;
+  color: transparent;
+  user-select: none;
 }
 
 /*canvas container layout and structure*/
